@@ -1,5 +1,5 @@
-
-const { Shop, Item } = require("../src/gilded_rose");
+import Item from '../src/guildedRose_Item.js';
+import Shop from '../src/guildedRose_Shop.js';
 
 const items = [
   new Item("+5 Dexterity Vest", 10, 20),

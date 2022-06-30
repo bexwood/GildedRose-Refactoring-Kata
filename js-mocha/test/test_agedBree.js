@@ -1,5 +1,7 @@
-var {expect} = require('chai');
-var {Shop, Item} = require('../src/gilded_rose.js');
+import { expect } from 'chai';
+import Item from '../src/guildedRose_Item.js';
+import Shop from '../src/guildedRose_Shop.js';
+
 describe("Gilded Rose", function() {
 
   it("should foo", function() {
