@@ -3,72 +3,58 @@ export default class Shop {
         this.items = items;
     }
 
-    getAgedBrie() {
-        return this.items.filter(item => (item.name === 'Aged Brie'));
+    updateSellByDate(item) {
+        item.sellIn -= 1;
+        return item;
     }
 
-    getSulfuras() {
-        return this.items.filter(item => (item.name === 'Sulfuras, Hand of Ragnaros'));
-    }
-
-    getBackStagePasses() {
-        return this.items.filter(item => (item.name === 'Backstage passes to a TAFKAL80ETC concert'));
-    }
-
-    getGeneralItems() {
-        return this.items.filter(item => (item.name !== 'Backstage passes to a TAFKAL80ETC concert' && item.name !== 'Sulfuras, Hand of Ragnaros' && item.name !== 'Aged Brie'));
-    }
-
-    updateSellByDate(arrayOfItems) {
-        for (let item of arrayOfItems) {
-            item.sellIn -= 1
+    updateBrieItem(item) {
+        if (item.sellIn > 0 && item.quality < 50) {
+            item.quality += 1
+        } else if (item.sellIn <= 0 && item.quality < 49) {
+            item.quality += 2
         }
-        return arrayOfItems
-    }
+        item = this.updateSellByDate(item);
+        return item;
+    };
 
-    updateAgedBrieQuality(arrayOfAgedBrie) {
-        for (let item of arrayOfAgedBrie) {
-            if (item.sellIn > 0 && item.quality < 50) {
-                item.quality += 1
-            } else if (item.sellIn <= 0 && item.quality < 49) {
-                item.quality += 2
-            }
+    updateBackstagePassItem(item) {
+        if (item.sellIn > 10 && item.quality < 50) {
+            item.quality += 1
+        } else if (item.sellIn > 5 && item.quality < 49) {
+            item.quality += 2
+        } else if (item.sellIn > 0 && item.quality < 48) {
+            item.quality += 3
+        } else if (item.sellIn <= 0) {
+            item.quality = 0
         }
-        return arrayOfAgedBrie;
-    }
+        item = this.updateSellByDate(item);
+        return item;
+    };
 
-    updateBackstagePassQuality(arrayOfBackstagePasses) {
-        for (let item of arrayOfBackstagePasses) {
-            if (item.sellIn > 10 && item.quality < 50) {
-                item.quality += 1
-            } else if (item.sellIn > 5 && item.quality < 49) {
-                item.quality += 2
-            } else if (item.sellIn > 0 && item.quality < 48) {
-                item.quality += 3
-            } else if (item.sellIn <= 0) {
-                item.quality = 0
-            }
+    updateGeneralItem(item) {
+        if (item.sellIn > 0 && item.quality > 0) {
+            item.quality -= 1;
+        } else if (item.sellIn <= 0 && item.quality > 1) {
+            item.quality -= 2;
         }
-        return arrayOfBackstagePasses;
-    }
-
-    updateGeneralItemQuality(arrayOfItems) {
-        for (let item of arrayOfItems) {
-            if (item.sellIn > 0 && item.quality > 0) {
-                item.quality -= 1
-            } else if (item.sellIn <= 0 && item.quality > 1) {
-                item.quality -= 2
-            }
-        }
-        return arrayOfItems;
-    }
+        item = this.updateSellByDate(item);
+        return item;
+    };
 
     updateQuality() {
-        let agedBrie = this.updateSellByDate(this.updateAgedBrieQuality(this.getAgedBrie()));
-        let sulfuras = this.getSulfuras();
-        let backstagePasses = this.updateSellByDate(this.updateBackstagePassQuality(this.getBackStagePasses()));
-        let otherItems = this.updateSellByDate(this.updateGeneralItemQuality(this.getGeneralItems()));
-        this.items = agedBrie.concat(sulfuras).concat(backstagePasses).concat(otherItems);
+        for (let item of this.items) {
+            if (item.name === 'Aged Brie') {
+                item = this.updateBrieItem(item);
+            } else if (item.name === 'Sulfuras, Hand of Ragnaros') {
+                continue;
+            } else if (item.name === 'Backstage passes to a TAFKAL80ETC concert') {
+                item = this.updateBackstagePassItem(item);
+            } else {
+                item = this.updateGeneralItem(item);
+            }
+        }
         return this.items;
-    }
-}
+    };
+
+};
