@@ -8,23 +8,33 @@ export default class Shop {
         return item;
     }
 
+    increaseQualityBy(value, quality){
+        let newQuality = quality + value;
+        return Math.min(newQuality, 50);
+    }
+
+    decreaseQualityBy(value, quality){
+        let newQuality = quality - value;
+        return Math.max(newQuality, 0);
+    }
+
     updateBrieItem(item) {
-        if (item.sellIn > 0 && item.quality < 50) {
-            item.quality += 1
-        } else if (item.sellIn <= 0 && item.quality < 49) {
-            item.quality += 2
+        if (item.sellIn > 0) {
+            item.quality = this.increaseQualityBy(1, item.quality);
+        } else if (item.sellIn <= 0) {
+            item.quality = this.increaseQualityBy(2, item.quality);
         }
         item = this.updateSellByDate(item);
         return item;
     };
 
     updateBackstagePassItem(item) {
-        if (item.sellIn > 10 && item.quality < 50) {
-            item.quality += 1
-        } else if (item.sellIn > 5 && item.quality < 49) {
-            item.quality += 2
-        } else if (item.sellIn > 0 && item.quality < 48) {
-            item.quality += 3
+        if (item.sellIn > 10) {
+            item.quality = this.increaseQualityBy(1, item.quality);
+        } else if (item.sellIn > 5) {
+            item.quality = this.increaseQualityBy(2, item.quality);
+        } else if (item.sellIn > 0) {
+            item.quality = this.increaseQualityBy(3, item.quality);
         } else if (item.sellIn <= 0) {
             item.quality = 0
         }
@@ -33,10 +43,10 @@ export default class Shop {
     };
 
     updateGeneralItem(item) {
-        if (item.sellIn > 0 && item.quality > 0) {
-            item.quality -= 1;
-        } else if (item.sellIn <= 0 && item.quality > 1) {
-            item.quality -= 2;
+        if (item.sellIn > 0) {
+            item.quality = this.decreaseQualityBy(1, item.quality);
+        } else if (item.sellIn <= 0) {
+            item.quality = this.decreaseQualityBy(2, item.quality);
         }
         item = this.updateSellByDate(item);
         return item;
@@ -56,5 +66,4 @@ export default class Shop {
         }
         return this.items;
     };
-
 };
