@@ -2,7 +2,6 @@ import updateBrieItem from "./brie.js";
 import updateBackstagePassItem from "./backstagePass.js";
 import updateGeneralItem from "./generalItem.js";
 
-
 export default class Shop {
     constructor(items = []) {
         this.items = items;
@@ -16,7 +15,7 @@ export default class Shop {
                 continue;
             } else if (item.name === 'Backstage passes to a TAFKAL80ETC concert') {
                 item = updateBackstagePassItem(item);
-            } else if (item.name === 'Conjured') {
+            } else if (item.name.slice(0,8) === 'Conjured') {
                 item = updateGeneralItem(item, true);
             } else {
                 item = updateGeneralItem(item, false);
