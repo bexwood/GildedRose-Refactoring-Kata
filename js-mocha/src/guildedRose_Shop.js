@@ -7,18 +7,21 @@ export default class Shop {
         this.items = items;
     }
 
+    checkIfConjured(item){
+        return item.name.slice(0,8) === 'Conjured';
+    }
+
     updateQuality() {
         for (let item of this.items) {
-            if (item.name === 'Aged Brie') {
-                item = updateBrieItem(item);
-            } else if (item.name === 'Sulfuras, Hand of Ragnaros') {
-                continue;
-            } else if (item.name === 'Backstage passes to a TAFKAL80ETC concert') {
-                item = updateBackstagePassItem(item);
-            } else if (item.name.slice(0,8) === 'Conjured') {
-                item = updateGeneralItem(item, true);
+            let conjured = this.checkIfConjured(item)
+            if (item.name.includes('Aged Brie')) {
+                item = updateBrieItem(item, conjured);
+            } else if (item.name.includes('Sulfuras')) {
+                continue
+            } else if (item.name.includes('Backstage pass')) {
+                item = updateBackstagePassItem(item, conjured);
             } else {
-                item = updateGeneralItem(item, false);
+                item = updateGeneralItem(item, conjured);
             }
         }
         return this.items;
