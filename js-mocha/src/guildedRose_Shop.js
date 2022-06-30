@@ -42,11 +42,15 @@ export default class Shop {
         return item;
     };
 
-    updateGeneralItem(item) {
+    updateGeneralItem(item, conjured) {
+        let factor = 1
+        if (conjured) {
+            factor = 2
+        }
         if (item.sellIn > 0) {
-            item.quality = this.decreaseQualityBy(1, item.quality);
+            item.quality = this.decreaseQualityBy(factor * 1, item.quality);
         } else if (item.sellIn <= 0) {
-            item.quality = this.decreaseQualityBy(2, item.quality);
+            item.quality = this.decreaseQualityBy(factor * 2, item.quality);
         }
         item = this.updateSellByDate(item);
         return item;
@@ -60,8 +64,10 @@ export default class Shop {
                 continue;
             } else if (item.name === 'Backstage passes to a TAFKAL80ETC concert') {
                 item = this.updateBackstagePassItem(item);
+            } else if (item.name === 'Conjured') {
+                item = this.updateGeneralItem(item, true);
             } else {
-                item = this.updateGeneralItem(item);
+                item = this.updateGeneralItem(item, false);
             }
         }
         return this.items;
